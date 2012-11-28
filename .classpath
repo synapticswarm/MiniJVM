@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home/jre/lib/jfxrt.jar" sourcepath="/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home/Src.zip"/>
+	<classpathentry kind="lib" path="src/junit-4.7.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

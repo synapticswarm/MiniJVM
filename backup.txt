@@ -1,0 +1,101 @@
+package com.synapticswarm.minijvm.opcode;
+
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.synapticswarm.minijvm.ConstantPool;
+import com.synapticswarm.minijvm.JVM;
+import com.synapticswarm.minijvm.MyMethod;
+import com.synapticswarm.minijvm.MyMethodEntry;
+import com.synapticswarm.minijvm.ConstantPoolTypes.CPClass;
+import com.synapticswarm.minijvm.ConstantPoolTypes.CPMethodref;
+import com.synapticswarm.minijvm.ConstantPoolTypes.CPNameAndType;
+import com.synapticswarm.minijvm.ConstantPoolTypes.CPUtf8;
+
+/**
+ * At present this is pretty limited and just invokes static void methods (but they can take arguments, except varargs ones)
+ * on public classes.
+ * 
+ * @author john
+ *
+ */
+public class InvokeVirtual implements OpCode {
+
+	@Override
+	public void execute(JVM jvm, MyMethod methodContext,
+			MyMethodEntry currentEntry, ConstantPool constantPool) {
+
+		//TODO so far only works with methods with 1 parameter!
+		// Stack should be: param first, then target object
+		Object poppedParameter = jvm.getStack().pop();
+		Object targetObject = jvm.getStack().pop();
+
+		// the arg for this bytecode points to a Methodref in the constant
+		// pool
+		int arg = currentEntry.arg;
+		CPMethodref methodref = (CPMethodref) constantPool.get(arg);
+
+		// get the target object class name
+		CPClass cpClass = (CPClass) constantPool
+				.get(methodref.classIndex);
+		CPUtf8 cpClassName = (CPUtf8) constantPool
+				.get(cpClass.classNameIndex);
+
+		// get the NameAndType entry
+		CPNameAndType cpNameAndType = (CPNameAndType) constantPool
+				.get(methodref.nameAndTypeIndex);
+
+		// get the method name
+		CPUtf8 cpMethodName = (CPUtf8) constantPool
+				.get(cpNameAndType.methodNameIndex);
+		String methodName = cpMethodName.value;
+
+		// get the method type descriptor
+		CPUtf8 cpMethodTypeDescriptor = (CPUtf8) constantPool
+				.get(cpNameAndType.methodTypeDescriptorIndex);
+		String methodTypeDescriptor = cpMethodTypeDescriptor.value;
+
+		// Grab a handle to the target method
+		MethodHandles.Lookup lookup = MethodHandles.lookup();
+		MethodType methodType = Helper.resolveMethodType(methodTypeDescriptor);
+		MethodHandle targetMethod = null;
+
+		try {
+			targetMethod = lookup.findVirtual(targetObject.getClass(),
+					methodName, methodType);
+		} catch (NoSuchMethodException | IllegalAccessException e1) {
+			e1.printStackTrace();
+			throw new RuntimeException("Could not locate method " + methodName);
+		}
+
+		// Each successive object on stack is a method actual parameter. Pop
+		// each one off stack and get them
+		// ready to feed into the method. Check their type while we're at it.
+		List<Class<?>> parameterTypes = methodType.parameterList();
+		List<Object> actualParameters = new LinkedList<>();
+		actualParameters.add(poppedParameter);
+
+		//at minute we can only handle 1 parameter
+		if (parameterTypes.size() > 1){
+			throw new RuntimeException("Method has >1 parameter, unimplemented support.");
+		}
+		
+		//check its type
+		Class <?> expectedClass = parameterTypes.get(0);
+		Class <?> actualClass = actualParameters.get(0).getClass();
+		
+		if (!expectedClass.equals(actualClass)){
+			throw new RuntimeException("expecting type:" + expectedClass + " but got:" + actualClass);
+		}
+
+		try {
+			targetMethod.invokeWithArguments(actualParameters);
+		} catch (Throwable e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+}
