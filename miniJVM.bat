@@ -1,0 +1,1 @@
+C:\otherwork\temp\miniJVM>%JAVA7_HOME%\bin\java -cp %CLASSPATH%;.;.\target\classes;%JAVA7_HOME%\jre\lib\jfxrt.jar com.synapticswarm.minijvm.ui.AppMain
