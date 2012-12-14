@@ -107,7 +107,7 @@
     <Label layoutX="23.0" layoutY="14.0" prefHeight="20.999908447265625" prefWidth="89.0" text="MiniJVM" />
     <HBox id="HBox" alignment="BASELINE_RIGHT" layoutX="324.0" layoutY="14.0" spacing="5.0">
       <children>
-        <Button mnemonicParsing="false" text="Run" />
+        <Button mnemonicParsing="false" onAction="#runFired" text="Run" />
         <Button mnemonicParsing="false" onAction="#stepFired" text="Step" />
         <Button mnemonicParsing="false" onAction="#resetFired" text="Reset" />
       </children>

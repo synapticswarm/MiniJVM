@@ -1,3 +1,5 @@
 target
 *.class
-
+.idea/misc.xml
+.idea/workspace.xml
+miniJVM.iml

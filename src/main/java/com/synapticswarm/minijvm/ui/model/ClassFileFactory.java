@@ -83,7 +83,8 @@ public class ClassFileFactory {
 			
 			if (argStr.startsWith("#")) {
 				// strip off leading hash
-				entry.setArg(Integer.parseInt(argStr.substring(1, 2)));
+                arg = Integer.parseInt(argStr.substring(1, 2));
+				entry.setArg(arg);
 			}
 			OpCode opCode = null;
 
@@ -120,6 +121,7 @@ public class ClassFileFactory {
 				break;
 			}
 			entry.setOpCode(opCode);
+            mainMethod.getEntries().add(entry);
 		}
 
 		return myClassFile;

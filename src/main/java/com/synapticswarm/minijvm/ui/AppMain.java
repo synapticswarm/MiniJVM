@@ -1,6 +1,7 @@
 package com.synapticswarm.minijvm.ui;
 
 import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,19 +17,14 @@ public class AppMain extends Application{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Application.launch(AppMain.class, (java.lang.String[]) null);
+       Application.launch(AppMain.class, (java.lang.String[]) null);
     }
 
     @Override
     public void start(Stage primaryStage) {
         try {
-
-            //AnchorPane page = (AnchorPane) FXMLLoader.load()
+            //Files.copy()
             AnchorPane page = (AnchorPane) FXMLLoader.load(AppMain.class.getResource("miniJVM.fxml"));
-
-            //AnchorPane page = (AnchorPane)FXMLLoader.load(new FileInputStream(new File("")));
-
-
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             primaryStage.setTitle("miniJVM");
