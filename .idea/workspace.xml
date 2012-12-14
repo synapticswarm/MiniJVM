@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9979f84c-5c42-4078-8ba8-bdb2ba54caa7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/JVM.java" afterPath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/JVM.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/AppMain.java" afterPath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/AppMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/UIController.java" afterPath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/UIController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/miniJVM.fxml" afterPath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/miniJVM.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/model/ClassFileFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/synapticswarm/minijvm/ui/model/ClassFileFactory.java" />
     </list>
     <ignored path="miniJVM.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -663,7 +655,11 @@
       <created>1355505479543</created>
       <updated>1355505479543</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="initial version">
+      <created>1355505833868</created>
+      <updated>1355505833868</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
