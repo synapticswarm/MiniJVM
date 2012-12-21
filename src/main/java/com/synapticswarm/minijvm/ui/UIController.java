@@ -164,11 +164,10 @@ public class UIController {
         );
     }
 
-    private void startJVM(boolean stepThrough) {
+    private void startJVM() {
         MiniClassFile myClassFile = ClassFileFactory.parseClassFile(constantPoolEntries, methodEntries);
-        jvm = new JVM(new ObservableStack(this.stackEntries), myClassFile, stepThrough);
+        jvm = new JVM(new ObservableStack(this.stackEntries), myClassFile);
         this.maxStepCount = myClassFile.getMainMethod().getEntries().size();
-        jvm.execute();
     }
 
     private JVM jvm = null;
@@ -215,15 +214,14 @@ public class UIController {
     public void stepFired(ActionEvent event) {
         if (stepCount == 0) {
             captureRows();
-            startJVM(true);
-            return;
+            startJVM();
         }
 
         if (stepCount == maxStepCount) {
             return;
         }
 
-        jvm.step();
+        jvm.executeOpCode();
         highlightRow();
         stepCount++;
     }
@@ -231,7 +229,7 @@ public class UIController {
     public void runFired(ActionEvent event) {
         captureRows();
         resetFired(event);
-        startJVM(false);
+        startJVM();
     }
 
 }

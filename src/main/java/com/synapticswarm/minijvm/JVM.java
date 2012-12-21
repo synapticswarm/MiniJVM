@@ -6,7 +6,6 @@ import com.synapticswarm.minijvm.model.MiniMethodEntry;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 public class JVM {
 
@@ -26,41 +25,21 @@ public class JVM {
     private MiniStack stack;
     private MiniClassFile classFile;
     private int stepCount = 0;
-    private Semaphore semaphore = new Semaphore(1);
-    private boolean stepThrough = true;
+    private Iterator <MiniMethodEntry> methodEntriesIterator = null;
+    private MethodContext methodContext = null;
 
-    public JVM(MiniStack stack, MiniClassFile classFile, boolean stepThrough) {
+    public JVM(MiniStack stack, MiniClassFile classFile) {
         this.stack = stack;
         this.classFile = classFile;
-        this.stepThrough = stepThrough;
+        this.methodEntriesIterator = this.classFile.getMainMethod().getEntries().iterator();
+        this.methodContext = new MethodContext();
     }
 
-    public void execute() {
-        Iterator<MiniMethodEntry> entriesItr = this.classFile.getMainMethod().getEntries().iterator();
-        MethodContext ctx = new MethodContext();
-
-        while (entriesItr.hasNext()) {
-            MiniMethodEntry entry = entriesItr.next();
-            entry.getOpCode().execute(stack, this.classFile.getConstantPool(), ctx);
-
-            if (stepThrough) {
-                try {
-                    this.semaphore.acquire();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
+    public void executeOpCode() {
+        if(this.methodEntriesIterator.hasNext()){
+            MiniMethodEntry entry = this.methodEntriesIterator.next();
+            entry.getOpCode().execute(stack, this.classFile.getConstantPool(), this.methodContext);
         }
-    }
-
-    public void step() {
-        if (stepThrough){
-            this.semaphore.release();
-        }
-    }
-
-    public int getLastExecutedStepIndex() {
-        return stepCount;
     }
 
 
