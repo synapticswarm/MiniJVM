@@ -15,4 +15,8 @@ public class CPUtf8 extends AbstractConstantPoolType{
 	public String toString() {
 		return getName() + ":" + value;
 	}
+
+    public String getValue(){
+        return this.value;
+    }
 }

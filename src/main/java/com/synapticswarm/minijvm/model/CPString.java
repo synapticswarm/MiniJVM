@@ -21,8 +21,8 @@ public class CPString extends AbstractConstantPoolType{
 
 	@Override
 	public String lookupValue(MiniConstantPool mcp) {
-		CPUtf8 c = (CPUtf8) mcp.getEntries()[this.utf8Index + 1];
-		return (String) c.lookupValue(mcp);
+		CPUtf8 c = (CPUtf8) mcp.getEntries()[this.utf8Index];
+		return c.getValue();
 	}
 	
 }

@@ -36,20 +36,20 @@ public class JVM {
     }
 
     public void execute() {
-        if (stepThrough) {
-            try {
-                this.semaphore.acquire();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
         Iterator<MiniMethodEntry> entriesItr = this.classFile.getMainMethod().getEntries().iterator();
         MethodContext ctx = new MethodContext();
 
         while (entriesItr.hasNext()) {
             MiniMethodEntry entry = entriesItr.next();
             entry.getOpCode().execute(stack, this.classFile.getConstantPool(), ctx);
+
+            if (stepThrough) {
+                try {
+                    this.semaphore.acquire();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 

@@ -10,6 +10,8 @@ import com.synapticswarm.minijvm.ui.model.MethodEntryDisplayModel;
 import com.synapticswarm.minijvm.ui.model.StackEntryDisplayModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -166,10 +168,10 @@ public class UIController {
         MiniClassFile myClassFile = ClassFileFactory.parseClassFile(constantPoolEntries, methodEntries);
         jvm = new JVM(new ObservableStack(this.stackEntries), myClassFile, stepThrough);
         this.maxStepCount = myClassFile.getMainMethod().getEntries().size();
-
-        Thread jvmThread = new Thread();
-        jvmThread.start();
+        jvm.execute();
     }
+
+    private JVM jvm = null;
 
     private void highlightRow() {
         if (stepCount == this.maxStepCount) {
@@ -207,7 +209,6 @@ public class UIController {
         }
     }
 
-    private JVM jvm = null;
     private int stepCount = 0;
     private int maxStepCount = -1;
 
@@ -215,6 +216,7 @@ public class UIController {
         if (stepCount == 0) {
             captureRows();
             startJVM(true);
+            return;
         }
 
         if (stepCount == maxStepCount) {
