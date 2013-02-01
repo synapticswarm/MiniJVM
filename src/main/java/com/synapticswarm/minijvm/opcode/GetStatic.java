@@ -1,6 +1,5 @@
 package com.synapticswarm.minijvm.opcode;
 
-import com.synapticswarm.minijvm.JVM;
 import com.synapticswarm.minijvm.JVM.MethodContext;
 import com.synapticswarm.minijvm.MiniClassLoader;
 import com.synapticswarm.minijvm.MiniStack;
@@ -9,23 +8,30 @@ import com.synapticswarm.minijvm.model.CPFieldref;
 import com.synapticswarm.minijvm.model.CPNameAndType;
 import com.synapticswarm.minijvm.model.CPUtf8;
 import com.synapticswarm.minijvm.model.MiniConstantPool;
-import com.synapticswarm.minijvm.model.MiniMethod;
-import com.synapticswarm.minijvm.model.MiniMethodEntry;
 
-public class GetStatic implements OpCode {
+public class GetStatic extends BaseOpCode {
 	private int arg;
-	
-	public GetStatic(int arg){
-		this.arg = arg;
-	}
 
-	/**
+    @Override
+    public int getOffSet() {
+        return 3;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "getstatic";
+    }
+
+    @Override
+    public void checkAndSetArguments(int offSet, String arg, String comment) throws Exception {
+        checkArgumentHasValue(arg);
+        setArg(arg);
+        checkOffSet(offSet);
+        setOffSet(offSet);
+    }
+
+    /**
 	 * Locates a static object and pushes it onto the stack.
-	 * 
-	 * @param jvm
-	 * @param methodContext
-	 * @param currentEntry
-	 * @param constantPool
 	 */
 	public void execute(MiniStack stack, MiniConstantPool constantPool, MethodContext ctx) {
 		// this bytecodes arg points to a Fieldref in the constant pool

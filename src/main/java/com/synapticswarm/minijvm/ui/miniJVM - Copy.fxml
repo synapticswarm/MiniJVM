@@ -112,9 +112,5 @@
         <Button mnemonicParsing="false" onAction="#resetFired" text="Reset" />
       </children>
     </HBox>
-    <ComboBox id="choiceBox" fx:id="choiceBox_examples" layoutY="14.0" prefHeight="21" prefWidth="170.0" AnchorPane.rightAnchor="32.0">
-
-    </ComboBox>
-    <Label layoutY="13.0" prefHeight="21.0" prefWidth="81.0" text="Load Example:" AnchorPane.rightAnchor="201.0" />
   </children>
 </AnchorPane>

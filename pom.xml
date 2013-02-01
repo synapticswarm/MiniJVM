@@ -9,7 +9,8 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <javafxrtlocation>C:\Apps\Java\jdk1.7.0_09\jre\lib\jfxrt.jar</javafxrtlocation>
+        <javahome>C:\Apps\Java\jdk1.6.0_37</javahome>
+        <javafxrtlocation>C:\Program Files\Oracle\JavaFX Scene Builder 1.0\lib\jfxrt.jar</javafxrtlocation>
     </properties>
 
     <build>
@@ -32,11 +33,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <executable>${env.JAVA7_HOME}/bin/javac</executable>
+                    <executable>${javahome}\bin\javac</executable>
                     <fork>true</fork>
                 </configuration>
             </plugin>
@@ -77,9 +78,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>javafx2</artifactId>
-            <version>2.0</version>
+            <groupId>Oracle</groupId>
+            <artifactId>javafx</artifactId>
+            <version>2.2.4</version>
         </dependency>
     </dependencies>
 </project>

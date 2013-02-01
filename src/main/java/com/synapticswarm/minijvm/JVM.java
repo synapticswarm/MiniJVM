@@ -42,5 +42,12 @@ public class JVM {
         }
     }
 
+    public void executeAll(){
+        while(this.methodEntriesIterator.hasNext()){
+            MiniMethodEntry entry = this.methodEntriesIterator.next();
+            entry.getOpCode().execute(stack, this.classFile.getConstantPool(), this.methodContext);
+        }
+    }
+
 
 }

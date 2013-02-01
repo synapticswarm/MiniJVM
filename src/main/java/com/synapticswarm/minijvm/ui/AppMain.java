@@ -1,7 +1,5 @@
 package com.synapticswarm.minijvm.ui;
 
-import java.io.FileInputStream;
-import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

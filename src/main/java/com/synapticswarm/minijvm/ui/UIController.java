@@ -2,6 +2,7 @@ package com.synapticswarm.minijvm.ui;
 
 import com.synapticswarm.minijvm.JVM;
 import com.synapticswarm.minijvm.ObservableStack;
+import com.synapticswarm.minijvm.examples.AdditionExample;
 import com.synapticswarm.minijvm.examples.HelloWorldExample;
 import com.synapticswarm.minijvm.model.MiniClassFile;
 import com.synapticswarm.minijvm.ui.model.ClassFileFactory;
@@ -10,8 +11,6 @@ import com.synapticswarm.minijvm.ui.model.MethodEntryDisplayModel;
 import com.synapticswarm.minijvm.ui.model.StackEntryDisplayModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -66,7 +65,7 @@ public class UIController {
     TextArea systemOutTextArea;
 
     @FXML
-    ChoiceBox choiceBox;
+    ComboBox<String> choiceBox_examples;
 
     private AtomicInteger count = new AtomicInteger(0);
 
@@ -89,19 +88,15 @@ public class UIController {
         tableViewMethodDisplay
                 .setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        HelloWorldExample.Data data = new HelloWorldExample.Data();
+        //HelloWorldExample.Data data = new HelloWorldExample.Data();
 
         //constant pool
-        constantPoolEntries = data.constantPoolEntries;
-
-        tableViewConstantPool.setItems(constantPoolEntries);
         initTextFieldColumn(this.constantPoolIndexColumn, "indexProperty");
         initChoiceBoxColumn(this.constantPoolTypeColumn, ConstantPoolEntryDisplayModel.constantPoolTypes, "typeProperty");
         initTextFieldColumn(this.constantPoolValueColumn, "valueProperty");
         initTextFieldColumn(this.constantPoolCommentColumn, "commentProperty");
 
         //method display
-        methodEntries = data.methodEntries;
         tableViewMethodDisplay.setItems(methodEntries);
         initTextFieldColumn(this.methodDisplayOffsetColumn, "offsetProperty");
         initChoiceBoxColumn(this.methodDisplayOpcodeColumn, MethodEntryDisplayModel.opCodes, "opcodeProperty");
@@ -118,6 +113,37 @@ public class UIController {
         //Capture System.out to the mini-console
         SystemOutCapturePrintStream stream = new SystemOutCapturePrintStream(this.systemOutTextArea, System.out);
         System.setOut(stream);
+
+        //Set up our examples
+        choiceBox_examples.getItems().add("None");
+        choiceBox_examples.getItems().add("Hello World");
+        choiceBox_examples.getItems().add("Addition");
+        choiceBox_examples.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        loadExample(choiceBox_examples.getSelectionModel().getSelectedItem());
+                    }
+                }
+        );
+        choiceBox_examples.getSelectionModel().select("Hello World");
+    }
+
+    private void loadExample(String example){
+        if("Hello World".equals(example)){
+            this.constantPoolEntries = HelloWorldExample.Data.constantPoolEntries;
+            this.methodEntries = HelloWorldExample.Data.methodEntries;
+        }else if("Addition".equals(example)){
+            this.constantPoolEntries = AdditionExample.Data.constantPoolEntries;
+            this.methodEntries = AdditionExample.Data.methodEntries;
+        }else if("None".equals(example)){
+            this.constantPoolEntries.clear();
+            this.methodEntries.clear();
+        }else{
+            this.systemOutTextArea.appendText("unrecognized example " + example);
+        }
+        tableViewConstantPool.setItems(constantPoolEntries);
+        tableViewMethodDisplay.setItems(methodEntries);
     }
 
     //I cannot believe I have to write this method. why do the properties not magically update?!
@@ -165,7 +191,15 @@ public class UIController {
     }
 
     private void startJVM() {
-        MiniClassFile myClassFile = ClassFileFactory.parseClassFile(constantPoolEntries, methodEntries);
+        MiniClassFile myClassFile = null;
+
+        try{
+            myClassFile = ClassFileFactory.parseClassFile(constantPoolEntries, methodEntries);
+            return;
+        }
+        catch (Exception ex){
+            this.systemOutTextArea.appendText(ex.getMessage() + "\n");
+        }
         jvm = new JVM(new ObservableStack(this.stackEntries), myClassFile);
         this.maxStepCount = myClassFile.getMainMethod().getEntries().size();
     }
@@ -206,6 +240,8 @@ public class UIController {
         for (TableRow row : this.methodRows) {
             row.setStyle("");//back to de-highlighted style
         }
+
+        this.systemOutTextArea.clear();
     }
 
     private int stepCount = 0;
@@ -230,6 +266,8 @@ public class UIController {
         captureRows();
         resetFired(event);
         startJVM();
+        jvm.executeAll();
+        this.methodRows.get(this.maxStepCount - 1).setStyle("-fx-background-color:yellow");
     }
 
 }

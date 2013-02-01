@@ -2,28 +2,27 @@ package com.synapticswarm.minijvm.model;
 
 import com.synapticswarm.minijvm.opcode.Helper;
 
-public class CPFieldref extends AbstractConstantPoolType{
+public class CPFieldref extends BaseConstantPoolEntry{
 	public int classIndex = -1;
 	public int nameAndTypeIndex = -1;
-	
-	public CPFieldref (int classIndex, int nameAndTypeIndex){
-		this.classIndex = classIndex;
-		this.nameAndTypeIndex = nameAndTypeIndex;
-	}
-	
-	public CPFieldref (String val) throws Exception{
-		int [] vals = Helper.split (val, '.');
-		this.classIndex = vals[0];
-		this.nameAndTypeIndex = vals [1];
-	}
-	
-	public String getName(){
+
+    @Override
+    public void checkAndSetArguments(String value, String comment) throws Exception {
+        checkArgHasTwoIndexes(value);
+        int [] vals = split(value);
+        this.classIndex = vals[0];
+        this.nameAndTypeIndex = vals [1];
+
+        setComment(comment);
+    }
+
+	public String getDisplayName(){
 		return "NameAndType";
 	}
 
 	@Override
 	public String toString() {
-		return getName() + ":" + classIndex + "," + nameAndTypeIndex;
+		return getDisplayName() + ":" + classIndex + "," + nameAndTypeIndex;
 	}
 	
 }

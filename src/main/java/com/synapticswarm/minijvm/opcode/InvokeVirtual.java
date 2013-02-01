@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 
 import com.synapticswarm.minijvm.JVM.MethodContext;
 import com.synapticswarm.minijvm.MiniStack;
-import com.synapticswarm.minijvm.model.CPClass;
 import com.synapticswarm.minijvm.model.CPMethodref;
 import com.synapticswarm.minijvm.model.CPNameAndType;
 import com.synapticswarm.minijvm.model.CPUtf8;
@@ -17,22 +16,26 @@ import com.synapticswarm.minijvm.model.MiniConstantPool;
  * @author john
  *
  */
-public class InvokeVirtual implements OpCode {
-	private int arg;	
-	
-	public InvokeVirtual(int arg){
-		this.arg = arg;
-	}
+public class InvokeVirtual extends BaseOpCode {
+	private int arg;
+
+    @Override
+    public int getOffSet() {
+        return 3;
+    }
+
+    @Override
+    public void checkAndSetArguments(int offSet, String arg, String comment) throws Exception {
+        checkArgumentHasValue(arg);
+        setArg(arg);
+        checkOffSet(offSet);
+        setOffSet(offSet);
+    }
 
 	/**
 	 * TODO this currently only works for methods with 1 parameter. We cut corners a bit here
 	 * and don't use everything from the constant pool. Also, we cheat: we invoke a method in the JVM
 	 * which our miniJVM is running in, rather than within our miniJVM.
-	 * 
-	 * @param jvm
-	 * @param methodContext
-	 * @param currentEntry
-	 * @param constantPool
 	 */
 	@Override
 	public void execute(MiniStack stack, MiniConstantPool constantPool, MethodContext ctx) {

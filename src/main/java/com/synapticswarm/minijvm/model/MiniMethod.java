@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MiniMethod {
-	private List <MiniMethodEntry> entries = new ArrayList <>();
+	private List <MiniMethodEntry> entries = new ArrayList <MiniMethodEntry>();
 	
 	public List<MiniMethodEntry> getEntries() {
 		return entries;

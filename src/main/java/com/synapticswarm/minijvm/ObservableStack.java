@@ -14,7 +14,7 @@ import com.synapticswarm.minijvm.ui.model.StackEntryDisplayModel;
  */
 public class ObservableStack implements MiniStack {
 	private ObservableList <StackEntryDisplayModel> observableList;
-	private Deque<Object> stack = new ArrayDeque <> ();
+	private Deque<Object> stack = new ArrayDeque <Object> ();
 	
 	public ObservableStack(ObservableList <StackEntryDisplayModel> observableList){
 		this.observableList = observableList;
