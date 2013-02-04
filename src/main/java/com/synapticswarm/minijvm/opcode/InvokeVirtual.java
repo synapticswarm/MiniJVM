@@ -20,16 +20,18 @@ public class InvokeVirtual extends BaseOpCode {
 	private int arg;
 
     @Override
-    public int getOffSet() {
+    public int getExpectedOffSetSize() {
         return 3;
     }
 
     @Override
-    public void checkAndSetArguments(int offSet, String arg, String comment) throws Exception {
-        checkArgumentHasValue(arg);
-        setArg(arg);
-        checkOffSet(offSet);
-        setOffSet(offSet);
+    public void checkAndSetArguments(int givenOffSetSize, int offSetPosition, String arg, String comment) throws Exception {
+        Helper.checkArgHasOneIndex(arg, getDisplayName());
+        setRawArgString(arg);
+        setArgInt(Integer.parseInt(Helper.stripLeadingHash(arg)));
+        super.checkOffSetAsExpected(givenOffSetSize, getExpectedOffSetSize());
+        setOffSetPosition(offSetPosition);
+        setComment(comment);
     }
 
 	/**
@@ -54,7 +56,7 @@ public class InvokeVirtual extends BaseOpCode {
 		// get the method name
 		CPUtf8 cpMethodName = (CPUtf8) constantPool
 				.get(cpNameAndType.methodNameIndex);
-		String methodName = cpMethodName.value;
+		String methodName = cpMethodName.getRawStringValue();
 		
 		Method tgt = null;
 		try {

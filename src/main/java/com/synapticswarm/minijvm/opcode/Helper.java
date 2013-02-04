@@ -105,59 +105,15 @@ public class Helper {
 //	}
 
 	/**
-	 * Get the Class for the supplied bytecode type code.
-	 * 
-	 * @param valType A code representing a primitive type e.g. 'B' for byte.
-	 * @return
-	 */
-//	private static Class<?> lookupValType(String valType) {
-//		switch (valType) {
-//		case "B":
-//			return byte.class;
-//		case "C":
-//			return char.class;
-//		case "D":
-//			return double.class;
-//		case "F":
-//			return float.class;
-//		case "I":
-//			return int.class;
-//		case "J":
-//			return long.class;
-//		case "S":
-//			return short.class;
-//		case "Z":
-//			return boolean.class;
-//		case "V":
-//			return void.class;
-//		case "[":
-//			throw new RuntimeException("array types not yet supported");
-//		default:
-//			throw new RuntimeException("Unrecognized value type code " + valType);
-//		}
-//	}
-
-	public static int[] splitDotDelimited(String str) {
-		return split(str, '.');
-	}
-
-	public static int[] splitColonDelimited(String str) {
-		return split(str, ':');
-	}
-
-	/**
 	 * Get 2 integers from the constant pool style String e.g. #1.#2
-	 * 
-	 * @param str
-	 * @param delim
+     *
 	 * @return an array of type int, with the integers in each of the 2 slots.
 	 */
-	public static int[] split(String str, char delim) {
-		int[] ints = new int[2];
-		int dotIndex = str.indexOf(delim);
-		ints[0] = Integer.parseInt(str.substring(1, dotIndex));
-		ints[1] = Integer.parseInt(str.substring(dotIndex + 2, str.length()));
-		return ints;
+	public static int[] split(String str, String delimiter) {
+		int dotIndex = str.indexOf(delimiter);
+		int left = Integer.parseInt(str.substring(1, dotIndex));
+		int right = Integer.parseInt(str.substring(dotIndex + 2, str.length()));
+        return new int [] {left, right};
 	}
 	
 	//strips off the # character if its on the front
@@ -167,4 +123,47 @@ public class Helper {
 		}
 		return s;
 	}
+
+    //e.g. converts #3 into 3
+    public static int toIntFromSingleValue(String s){
+        return Integer.parseInt(Helper.stripLeadingHash(s));
+    }
+
+    public static void checkValueIsNullOrEmpty(String arg, String message) throws Exception{
+        if (arg != null && arg.length() > 0){
+            throw new Exception("Argument " + arg + " should be null for " + message);
+        }
+    }
+
+    public static boolean checkArgHasTwoIndexes(String arg, String message, String delimiter) throws Exception{
+
+        String delim = null;
+
+        if (".".equals(delimiter)){
+            delim = "\\.";
+        }
+        if (":".equals(delimiter)){
+            delim = "\\:";
+        }
+
+        if (arg == null || (!arg.matches("#[0-9]{1,2}" + delim + "#[0-9]{1,2}"))){
+            throw new Exception("Argument " + arg + " must be of the format #[0-9]{1,2}.#[0-9]{1,2} for " + message);
+        }
+        return true;
+    }
+
+    public static boolean checkArgHasOneIndex(String arg, String message) throws Exception{
+        if (arg == null || (!arg.matches("#[0-9]{1,2}"))){
+            throw new Exception("Argument " + arg + " must be of the format #[0-9]{1,2} for " + message);
+        }
+        return true;
+    }
+
+    //checks is of format #1 or #12
+    protected static void checkArgumentHasValue(String arg, String message) throws Exception{
+        if (arg == null || (!arg.matches("#[0-9]{1,2}"))){
+            throw new Exception("Argument " + arg + " must be of the format #[0-9]{1,2} for " + message);
+        }
+    }
+
 }

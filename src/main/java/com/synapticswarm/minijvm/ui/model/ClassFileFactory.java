@@ -21,115 +21,141 @@ public class ClassFileFactory {
             int index = Integer.parseInt(model.getIndexProperty());
             String type = model.getTypeProperty();
             String value = model.getValueProperty();
-            AbstractConstantPoolType cpType = null;
+            String comment = model.getCommentProperty();
+            ConstantPoolEntry constantPoolEntry = null;
 
             try {
                 //NB: could switch on the String in Java7
                 if ("Integer".equals(type)) {
-                    cpType = new CPInteger(value);
+                    constantPoolEntry = new CPInteger();
                 } else if ("Utf8".equals(type)) {
-                    cpType = new CPUtf8(value);
+                    constantPoolEntry = new CPUtf8();
                 } else if ("Class".equals(type)) {
-                    cpType = new CPClass(value);
+                    constantPoolEntry = new CPClass();
                 } else if ("Fieldref".equals(type)) {
-                    cpType = new CPFieldref(value);
+                    constantPoolEntry = new CPFieldref();
                 } else if ("NameAndType".equals(type)) {
-                    cpType = new CPNameAndType(value);
+                    constantPoolEntry = new CPNameAndType();
                 } else if ("Methodref".equals(type)) {
-                    cpType = new CPMethodref(value);
+                    constantPoolEntry = new CPMethodref();
                 } else if ("String".equals(type)) {
-                    cpType = new CPString(value);
+                    constantPoolEntry = new CPString();
                 } else {
                     throw new Exception("Type is unrecognized!" + type);
                 }
+                constantPoolEntry.checkAndSetArguments(value, comment);
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            constantPool.set(cpType, index);
+            constantPool.set(constantPoolEntry, index);
         }
         myClassFile.setConstantPool(constantPool);
 
         // TODO simplified here for just 1 method with no params etc.
         MiniMethod mainMethod = new MiniMethod();
         myClassFile.setMainMethod(mainMethod);
+        int previousOffSetIndex = -1;
+        int previousOffSetSize = -1;
 
         for (MethodEntryDisplayModel model : methodEntriesModel) {
             MiniMethodEntry entry = new MiniMethodEntry();
 
             String opCodeStr = model.getOpcodeProperty();
             String argStr = model.getArgProperty();
+            //fyi: the displayed offset on the screen is the current offset index
             String offSetStr = model.getOffsetProperty();
             String commentStr = model.getCommentProperty();
 
-            int offSet = -1;
+            int currentOffSetDisplayIndex = -1;
 
             try {
-                offSet = Integer.parseInt(offSetStr);
+                currentOffSetDisplayIndex = Integer.parseInt(offSetStr);
             } catch (Exception ex) {
                 throw new Exception("Offset " + argStr + " is not a number");
             }
 
-            IOpCode opCode = null;
+            OpCode opCode = null;
 
             if ("getstatic".equals(opCodeStr)) {
                 opCode = new GetStatic();
             }
-            if ("invokevirtual".equals(opCodeStr)) {
+            else if ("invokevirtual".equals(opCodeStr)) {
                 opCode = new InvokeVirtual();
             }
-            if ("ldc".equals(opCodeStr)) {
+            else if ("ldc".equals(opCodeStr)) {
                 opCode = new Ldc();
             }
-            if ("imul".equals(opCodeStr)) {
+            else if  ("imul".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.imul();
             }
-            if ("iadd".equals(opCodeStr)) {
+            else if  ("iadd".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iadd();
             }
-            if ("iload_0".equals(opCodeStr)) {
+            else if  ("iload_0".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iload_0();
             }
-            if ("iload_1".equals(opCodeStr)) {
+            else if  ("iload_1".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iload_1();
             }
-            if ("iload_2".equals(opCodeStr)) {
+            else if  ("iload_2".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iload_2();
             }
-            if ("iload_3".equals(opCodeStr)) {
+            else if  ("iload_3".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iload_3();
             }
-            if ("istore_0".equals(opCodeStr)) {
+            else if  ("istore_0".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.istore_0();
             }
-            if ("istore_1".equals(opCodeStr)) {
+            else if  ("istore_1".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.istore_1();
             }
-            if ("istore_2".equals(opCodeStr)) {
+            else if  ("istore_2".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.istore_2();
             }
-            if ("istore_3".equals(opCodeStr)) {
+            else if  ("istore_3".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.istore_3();
             }
-            if ("iconst_0".equals(opCodeStr)) {
+            else if  ("iconst_0".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iconst_0();
             }
-            if ("iconst_1".equals(opCodeStr)) {
+            else if  ("iconst_1".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iconst_1();
             }
-            if ("iconst_2".equals(opCodeStr)) {
+            else if  ("iconst_2".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iconst_2();
             }
-            if ("iconst_3".equals(opCodeStr)) {
+            else if  ("iconst_3".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes.iconst_3();
             }
-            if ("return".equals(opCodeStr)) {
+            else if  ("return".equals(opCodeStr)) {
                 opCode = new SimpleOpCodes._return();
             } else {
                 throw new Exception("unrecognized opcode " + opCodeStr);
             }
 
-            opCode.checkAndSetArguments(offSet, argStr, commentStr);
+            //The screen shows the offset index, from which the size can be determined. The user should enter the correct index
+            //according to the size of that offset.
 
+            //For the first offset the index is always zero
+            if(previousOffSetIndex == -1){//-1 is a special value to show we are on the first entry. we can't use zero.
+                if (currentOffSetDisplayIndex != 0){
+                    throw new Exception("");
+                }
+                previousOffSetIndex = 0;
+            }else{
+                int correctDisplayIndex = previousOffSetIndex + previousOffSetSize;
+
+                if (currentOffSetDisplayIndex != correctDisplayIndex){
+                    throw new Exception("Offset should be " + correctDisplayIndex + " for " + opCode.getDisplayName());
+                }
+                previousOffSetIndex = correctDisplayIndex;
+            }
+            previousOffSetSize = opCode.getExpectedOffSetSize();
+
+            //we don't really need to calculate the size as we can see by the index whether it was correct.
+            opCode.checkAndSetArguments(opCode.getExpectedOffSetSize(), currentOffSetDisplayIndex, argStr, commentStr);
+            entry.setOpCode(opCode);
             mainMethod.getEntries().add(entry);
         }
 

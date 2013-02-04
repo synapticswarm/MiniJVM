@@ -1,20 +1,27 @@
 package com.synapticswarm.minijvm.model;
 
+import com.synapticswarm.minijvm.opcode.Helper;
+
 public abstract class BaseConstantPoolEntry implements ConstantPoolEntry{
-    private String value;
+    private String rawStringValue;
     private String comment;
 
     @Override
     public void checkAndSetArguments(String value, String comment) throws Exception {
-        checkValueIsNullOrEmpty();
-        setValue(value);
+        Helper.checkValueIsNullOrEmpty(value, getDisplayName());
+        setRawStringValue(value);
         //don't bother checking commment
         setComment(comment);
     }
 
     @Override
-    public String getValue() {
-        return value;
+    public String getRawStringValue() {
+        return rawStringValue;
+    }
+
+    @Override
+    public void setRawStringValue(String s){
+        rawStringValue = s;
     }
 
     @Override
@@ -22,32 +29,16 @@ public abstract class BaseConstantPoolEntry implements ConstantPoolEntry{
         return comment;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+//    public void setValue(String value) {
+//        this.value = value;
+//    }
 
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public void checkValueIsNullOrEmpty() throws Exception{
-        String arg = getValue();
-        if (arg != null && arg.length() > 0){
-            throw new Exception("Argument " + arg + " should be null for OpCode " + getDisplayName());
-        }
-    }
-
-    public boolean checkArgHasTwoIndexes(String arg) throws Exception{
-        if (arg == null || (!arg.matches("#[0-9]{1,2}\\.#[0-9]{1,2}"))){
-            throw new Exception("Argument " + arg + " must be of the format #[0-9]{1,2}.#[0-9]{1,2} for OpCode " + getDisplayName());
-        }
-        return true;
-    }
-
-    public int [] split(String arg){
-        //TODO test
-        int left = Integer.parseInt(arg.substring(1,arg.indexOf(".")));
-        int right = Integer.parseInt(arg.substring(arg.indexOf(".") + arg.length()));
-        return new int [] {left, right};
+    @Override
+    public String lookupValue(MiniConstantPool mcp) {
+        throw new RuntimeException("Not implemented");
     }
 }

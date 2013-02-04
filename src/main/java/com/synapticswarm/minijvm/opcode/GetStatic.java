@@ -10,10 +10,9 @@ import com.synapticswarm.minijvm.model.CPUtf8;
 import com.synapticswarm.minijvm.model.MiniConstantPool;
 
 public class GetStatic extends BaseOpCode {
-	private int arg;
 
     @Override
-    public int getOffSet() {
+    public int getExpectedOffSetSize() {
         return 3;
     }
 
@@ -23,11 +22,13 @@ public class GetStatic extends BaseOpCode {
     }
 
     @Override
-    public void checkAndSetArguments(int offSet, String arg, String comment) throws Exception {
-        checkArgumentHasValue(arg);
-        setArg(arg);
-        checkOffSet(offSet);
-        setOffSet(offSet);
+    public void checkAndSetArguments(int givenOffSetSize, int offSetPosition, String arg, String comment) throws Exception {
+        Helper.checkArgHasOneIndex(arg, getDisplayName());
+        setRawArgString(arg);
+        setArgInt(Integer.parseInt(Helper.stripLeadingHash(arg)));
+        super.checkOffSetAsExpected(givenOffSetSize, getExpectedOffSetSize());
+        setOffSetPosition(offSetPosition);
+        setComment(comment);
     }
 
     /**
@@ -36,7 +37,7 @@ public class GetStatic extends BaseOpCode {
 	public void execute(MiniStack stack, MiniConstantPool constantPool, MethodContext ctx) {
 		// this bytecodes arg points to a Fieldref in the constant pool
 		CPFieldref cpFieldRef = (CPFieldref) constantPool
-				.get(this.arg);
+				.get(this.getArgInt());
 
 		// Fieldref contains a Class index and a NameAndType index. First we
 		// follow the chain to get the class name
@@ -45,7 +46,7 @@ public class GetStatic extends BaseOpCode {
 		// Class points to a Utf8
 		CPUtf8 cpUtf8ClassName = (CPUtf8) constantPool
 				.get(cpClass.classNameIndex);
-		String className = cpUtf8ClassName.value;
+		String className = cpUtf8ClassName.getStringValue();
 
 		// Now we get the NameAndType and follow its two links to get the
 		// field name and field type name
@@ -53,10 +54,10 @@ public class GetStatic extends BaseOpCode {
 				.get(cpFieldRef.nameAndTypeIndex);
 		CPUtf8 cpUtf8FieldName = (CPUtf8) constantPool
 				.get(cpNameAndType.methodNameIndex);
-		String fieldName = cpUtf8FieldName.value;
+		String fieldName = cpUtf8FieldName.getStringValue();
 		CPUtf8 cpUtf8TypeName = (CPUtf8) constantPool
 				.get(cpNameAndType.methodTypeDescriptorIndex);
-		String typeName = cpUtf8TypeName.value;
+		String typeName = cpUtf8TypeName.getStringValue();
 
 		// Now we have all the information we need, we should locate the
 		// object and push it onto the stack

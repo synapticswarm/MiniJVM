@@ -5,19 +5,36 @@ import com.synapticswarm.minijvm.opcode.Helper;
 public class CPFieldref extends BaseConstantPoolEntry{
 	public int classIndex = -1;
 	public int nameAndTypeIndex = -1;
+    private final static String DELIMITER = ".";
 
     @Override
     public void checkAndSetArguments(String value, String comment) throws Exception {
-        checkArgHasTwoIndexes(value);
-        int [] vals = split(value);
+        setComment(comment);
+        Helper.checkArgHasTwoIndexes(value, getDisplayName(), DELIMITER);
+        int [] vals = Helper.split(value, DELIMITER);
         this.classIndex = vals[0];
         this.nameAndTypeIndex = vals [1];
-
-        setComment(comment);
     }
 
-	public String getDisplayName(){
-		return "NameAndType";
+    public int getClassIndex() {
+        return classIndex;
+    }
+
+    public void setClassIndex(int classIndex) {
+        this.classIndex = classIndex;
+    }
+
+    public int getNameAndTypeIndex() {
+        return nameAndTypeIndex;
+    }
+
+    public void setNameAndTypeIndex(int nameAndTypeIndex) {
+        this.nameAndTypeIndex = nameAndTypeIndex;
+    }
+
+    @Override
+    public String getDisplayName(){
+		return "Field";
 	}
 
 	@Override

@@ -3,23 +3,23 @@ package com.synapticswarm.minijvm.model;
 
 public class MiniConstantPool{
 
-	private final AbstractConstantPoolType [] entries;
+	private final ConstantPoolEntry [] entries;
 	
 	public MiniConstantPool(int size){
-		//array is zero based but constant pool is 1-based
-		this.entries = new AbstractConstantPoolType [size + 1];
+		//array is zero based but constant pool is 1-based so we will make it one slot bigger and ignore slot 0.
+		this.entries = new ConstantPoolEntry [size + 1];
 	}
 	
-	public AbstractConstantPoolType[] getEntries() {
+	public ConstantPoolEntry[] getEntries() {
 		return entries;
 	}
 	
-	public AbstractConstantPoolType get(int i){
+	public ConstantPoolEntry get(int i){
 		if (i == 0) throw new RuntimeException("Array is 1-based!");
 		return this.entries[i];
 	}
 	
-	public void set(AbstractConstantPoolType a, int i){
+	public void set(ConstantPoolEntry a, int i){
 		if (i == 0) throw new RuntimeException("Array is 1-based!");
 		this.entries[i] = a;
 	}

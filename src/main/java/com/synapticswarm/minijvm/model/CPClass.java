@@ -2,20 +2,31 @@ package com.synapticswarm.minijvm.model;
 
 import com.synapticswarm.minijvm.opcode.Helper;
 
-public class CPClass extends AbstractConstantPoolType {
+public class CPClass extends BaseConstantPoolEntry {
 	public int classNameIndex = -1;
 
-	public CPClass(String val) {
-		int intVal = Integer.parseInt(Helper.stripLeadingHash(val));
-		this.classNameIndex = intVal;
-	}
+    public int getClassNameIndex() {
+        return classNameIndex;
+    }
 
-	public String getName() {
-		return "Class";
+    public void setClassNameIndex(int classNameIndex) {
+        this.classNameIndex = classNameIndex;
+    }
+
+    @Override
+    public void checkAndSetArguments(String value, String comment) throws Exception {
+        setComment(comment);
+        Helper.checkArgHasOneIndex(value, comment);
+        setClassNameIndex(Integer.parseInt(Helper.stripLeadingHash(value)));
+    }
+
+    @Override
+    public String getDisplayName() {
+		return "class";
 	}
 
 	@Override
 	public String toString() {
-		return getName() + ":" + classNameIndex;
+		return getDisplayName() + ":" + classNameIndex;
 	}
 }

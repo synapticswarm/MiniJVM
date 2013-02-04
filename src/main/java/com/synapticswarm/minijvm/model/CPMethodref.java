@@ -2,26 +2,43 @@ package com.synapticswarm.minijvm.model;
 
 import com.synapticswarm.minijvm.opcode.Helper;
 
-public class CPMethodref extends AbstractConstantPoolType{
+public class CPMethodref extends BaseConstantPoolEntry{
 	public int classIndex = -1;
 	public int nameAndTypeIndex = -1;
+    private final static String DELIMITER = ".";
 
-	public CPMethodref(int classIndex, int nameAndTypeIndex){
-		this.classIndex = classIndex;
-		this.nameAndTypeIndex = nameAndTypeIndex;
+    @Override
+    public void checkAndSetArguments(String value, String comment) throws Exception {
+        this.setComment(comment);
+        Helper.checkArgHasTwoIndexes(value, getDisplayName(), DELIMITER);
+        int [] vals = Helper.split(value, DELIMITER);
+        this.classIndex = vals[0];
+        this.nameAndTypeIndex = vals[1];
+    }
+
+    public int getClassIndex() {
+        return classIndex;
+    }
+
+    public void setClassIndex(int classIndex) {
+        this.classIndex = classIndex;
+    }
+
+    public int getNameAndTypeIndex() {
+        return nameAndTypeIndex;
+    }
+
+    public void setNameAndTypeIndex(int nameAndTypeIndex) {
+        this.nameAndTypeIndex = nameAndTypeIndex;
+    }
+
+    @Override
+    public String getDisplayName(){
+		return "Method";
 	}
-	
-	public CPMethodref (String val) {
-		int [] vals = Helper.split (val, '.');
-		this.classIndex = vals[0];
-		this.nameAndTypeIndex = vals [1];
-	}
-	
-	public String getName(){
-		return "Methodref";
-	}
+
 	@Override
 	public String toString() {
-		return getName() + ":" + classIndex + "," + nameAndTypeIndex;
+		return getDisplayName() + ":" + classIndex + "," + nameAndTypeIndex;
 	}
 }

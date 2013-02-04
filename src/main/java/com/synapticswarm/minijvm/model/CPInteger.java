@@ -1,22 +1,32 @@
 package com.synapticswarm.minijvm.model;
 
-public class CPInteger extends AbstractConstantPoolType {
-	private Integer value;
+import com.synapticswarm.minijvm.opcode.Helper;
 
-	public CPInteger(String val) {
-		this.value = Integer.parseInt(val);
-	}
+public class CPInteger extends BaseConstantPoolEntry {
+	private int intValue;
 
-	public Integer getArg() {
-		return value;
-	}
+    @Override
+    public void checkAndSetArguments(String value, String comment) throws Exception {
+        setComment(comment);
+        Helper.checkArgHasOneIndex(value, getDisplayName());
+        setIntValue(Integer.parseInt(Helper.stripLeadingHash(value)));
+    }
 
-	public String getName() {
+    public int getIntValue() {
+        return intValue;
+    }
+
+    public void setIntValue(int intValue) {
+        this.intValue = intValue;
+    }
+
+    @Override
+    public String getDisplayName() {
 		return "Integer";
 	}
 
 	@Override
 	public String toString() {
-		return getName() + ":" + value;
+		return getDisplayName() + ":" + getIntValue();
 	}
 }

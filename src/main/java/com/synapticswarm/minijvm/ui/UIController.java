@@ -195,13 +195,12 @@ public class UIController {
 
         try{
             myClassFile = ClassFileFactory.parseClassFile(constantPoolEntries, methodEntries);
-            return;
+            jvm = new JVM(new ObservableStack(this.stackEntries), myClassFile);
+            this.maxStepCount = myClassFile.getMainMethod().getEntries().size();
         }
         catch (Exception ex){
             this.systemOutTextArea.appendText(ex.getMessage() + "\n");
         }
-        jvm = new JVM(new ObservableStack(this.stackEntries), myClassFile);
-        this.maxStepCount = myClassFile.getMainMethod().getEntries().size();
     }
 
     private JVM jvm = null;

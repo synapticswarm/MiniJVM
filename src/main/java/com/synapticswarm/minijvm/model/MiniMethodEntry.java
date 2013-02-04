@@ -1,29 +1,29 @@
 package com.synapticswarm.minijvm.model;
 
-import com.synapticswarm.minijvm.opcode.IOpCode;
+import com.synapticswarm.minijvm.opcode.OpCode;
 
 /**
  * Represents a single line in a method's bytecode.
  *
  */
 public class MiniMethodEntry {
-	private IOpCode opCode;
+	private OpCode opCode;
 	private int arg;
 	private int offset;
 	
 	public MiniMethodEntry(){}
 	
-	public MiniMethodEntry(IOpCode opCode, int arg, int offset){
+	public MiniMethodEntry(OpCode opCode, int arg, int offset){
 		this.opCode = opCode;
 		this.arg = arg;
 		this.offset = offset;
 	}
 	
-	public IOpCode getOpCode() {
+	public OpCode getOpCode() {
 		return opCode;
 	}
 
-	public void setOpCode(IOpCode opCode) {
+	public void setOpCode(OpCode opCode) {
 		this.opCode = opCode;
 	}
 

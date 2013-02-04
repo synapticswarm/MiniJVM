@@ -2,7 +2,7 @@ package com.synapticswarm.minijvm.opcode;
 
 import com.synapticswarm.minijvm.MiniStack;
 import com.synapticswarm.minijvm.JVM.MethodContext;
-import com.synapticswarm.minijvm.model.AbstractConstantPoolType;
+import com.synapticswarm.minijvm.model.ConstantPoolEntry;
 import com.synapticswarm.minijvm.model.MiniConstantPool;
 
 // push a constant #index from a constant pool (String, int or float) onto
@@ -11,7 +11,7 @@ public class Ldc extends BaseOpCode {
     private int arg;
 
     @Override
-    public int getOffSet() {
+    public int getExpectedOffSetSize() {
         return 2;
     }
 
@@ -21,17 +21,19 @@ public class Ldc extends BaseOpCode {
     }
 
     @Override
-    public void checkAndSetArguments(int offSet, String arg, String comment) throws Exception {
-        checkArgumentHasValue(arg);
-        setArg(arg);
-        checkOffSet(offSet);
-        setOffSet(offSet);
+    public void checkAndSetArguments(int givenOffSetSize, int offSetPosition, String arg, String comment) throws Exception {
+        Helper.checkArgHasOneIndex(arg, getDisplayName());
+        setRawArgString(arg);
+        setArgInt(Integer.parseInt(Helper.stripLeadingHash(arg)));
+        super.checkOffSetAsExpected(givenOffSetSize, getExpectedOffSetSize());
+        setOffSetPosition(offSetPosition);
+        setComment(comment);
     }
 
     public void execute(MiniStack stack, MiniConstantPool constantPool, MethodContext ctx) {
-        AbstractConstantPoolType cpType = constantPool.get(arg);
+        ConstantPoolEntry constantPoolEntry = constantPool.get(arg);
 
         //we've delegated the responsibility for getting the actual value to the CPType class itself
-        stack.push(cpType.lookupValue(constantPool));
+        stack.push(constantPoolEntry.lookupValue(constantPool));
     }
 }
