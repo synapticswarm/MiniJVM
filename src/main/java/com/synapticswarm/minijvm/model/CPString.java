@@ -33,7 +33,7 @@ public class CPString extends BaseConstantPoolEntry{
     @Override
 	public String lookupValue(MiniConstantPool mcp) {
 		CPUtf8 c = (CPUtf8) mcp.getEntries()[this.utf8Index];
-		return c.getRawStringValue();
+		return c.getStringValue();
 	}
 	
 }

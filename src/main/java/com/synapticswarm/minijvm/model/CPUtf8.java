@@ -6,6 +6,7 @@ public class CPUtf8 extends BaseConstantPoolEntry{
     @Override
     public void checkAndSetArguments(String value, String comment) throws Exception {
         setStringValue(value);
+        setRawStringValue(value);
         setComment(comment);
     }
 

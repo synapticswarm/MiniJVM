@@ -8,7 +8,6 @@ import com.synapticswarm.minijvm.model.MiniConstantPool;
 // push a constant #index from a constant pool (String, int or float) onto
 // the stack
 public class Ldc extends BaseOpCode {
-    private int arg;
 
     @Override
     public int getExpectedOffSetSize() {
@@ -31,7 +30,7 @@ public class Ldc extends BaseOpCode {
     }
 
     public void execute(MiniStack stack, MiniConstantPool constantPool, MethodContext ctx) {
-        ConstantPoolEntry constantPoolEntry = constantPool.get(arg);
+        ConstantPoolEntry constantPoolEntry = constantPool.get(this.getArgInt());
 
         //we've delegated the responsibility for getting the actual value to the CPType class itself
         stack.push(constantPoolEntry.lookupValue(constantPool));

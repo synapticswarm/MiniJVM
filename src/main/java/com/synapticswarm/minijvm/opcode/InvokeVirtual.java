@@ -17,8 +17,6 @@ import com.synapticswarm.minijvm.model.MiniConstantPool;
  *
  */
 public class InvokeVirtual extends BaseOpCode {
-	private int arg;
-
     @Override
     public int getExpectedOffSetSize() {
         return 3;
@@ -47,7 +45,7 @@ public class InvokeVirtual extends BaseOpCode {
 		Object targetObject = stack.pop();
 
 		// the arg for this bytecode points to a Methodref in the constant pool
-		CPMethodref methodref = (CPMethodref) constantPool.get(this.arg);
+		CPMethodref methodref = (CPMethodref) constantPool.get(this.getArgInt());
 
 		// get the NameAndType entry
 		CPNameAndType cpNameAndType = (CPNameAndType) constantPool
