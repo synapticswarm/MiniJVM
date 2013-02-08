@@ -61,17 +61,19 @@
                 </SplitPane>
               </children>
             </AnchorPane>
+
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+
               <children>
-                <SplitPane dividerPositions="0.7767527675276753" focusTraversable="true" orientation="VERTICAL" prefHeight="358.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <SplitPane dividerPositions="0.5" focusTraversable="true" orientation="VERTICAL" prefHeight="358.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <items>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                       <children>
-                        <TitledPane animated="false" prefHeight="175.0" prefWidth="234.0" text="Stack" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TitledPane animated="false" prefHeight="100.0" prefWidth="234.0" text="Stack" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <content>
-                            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="200.0">
                               <children>
-                                <TableView fx:id="tableViewStack" prefHeight="149.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="tableViewStack" prefHeight="100.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                   <columns>
                                     <TableColumn prefWidth="75.0" sortable="false" text="Value" fx:id="stackValueColumn" />
                                     <TableColumn prefWidth="75.0" sortable="false" text="Type" fx:id="stackTypeColumn" />
@@ -83,6 +85,32 @@
                         </TitledPane>
                       </children>
                     </AnchorPane>
+
+
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                      <children>
+                        <TitledPane animated="false" prefHeight="75.0" prefWidth="234.0" text="Local Variables" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <content>
+                            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="80.0" prefWidth="200.0">
+                              <children>
+                                <TableView fx:id="tableViewLocalVariables" prefHeight="49.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                  <columns>
+                                    <TableColumn prefWidth="75.0" sortable="false" text="Value" fx:id="localVariableValueColumn" />
+                                    <TableColumn prefWidth="75.0" sortable="false" text="Type" fx:id="localVariableTypeColumn" />
+                                  </columns>
+                                </TableView>
+                              </children>
+                            </AnchorPane>
+                          </content>
+                        </TitledPane>
+                      </children>
+                    </AnchorPane>
+
+                 </items>
+                </SplitPane>
+                <SplitPane dividerPositions="0.5" focusTraversable="true" orientation="VERTICAL" prefHeight="358.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                       <children>
                         <TitledPane animated="false" prefHeight="175.0" prefWidth="234.0" text="System.out" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -96,7 +124,7 @@
                         </TitledPane>
                       </children>
                     </AnchorPane>
-                  </items>
+                 </items>
                 </SplitPane>
               </children>
             </AnchorPane>

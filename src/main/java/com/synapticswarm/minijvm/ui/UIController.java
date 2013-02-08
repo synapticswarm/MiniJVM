@@ -39,6 +39,13 @@ public class UIController {
     TableColumn stackTypeColumn;
 
     @FXML
+    TableView tableViewLocalVariables;
+    @FXML
+    TableColumn localVariableValueColumn;
+    @FXML
+    TableColumn localVariableTypeColumn;
+
+    @FXML
     TableView tableViewMethodDisplay;
     @FXML
     TableColumn methodDisplayOffsetColumn;
@@ -72,6 +79,7 @@ public class UIController {
     private ObservableList<ConstantPoolEntryDisplayModel> constantPoolEntries;
     private ObservableList<MethodEntryDisplayModel> methodEntries;
     private ObservableList<StackEntryDisplayModel> stackEntries = FXCollections.observableArrayList();
+    private ObservableList<StackEntryDisplayModel> localVariableEntries = FXCollections.observableArrayList();
 
     //TODO must be a better way of capturing rows
     private List<TableRow> methodRows = new ArrayList<TableRow>();
@@ -86,6 +94,8 @@ public class UIController {
                 .setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableViewConstantPool.setEditable(true);
         tableViewMethodDisplay
+                .setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableViewLocalVariables
                 .setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         //HelloWorldExample.Data data = new HelloWorldExample.Data();
@@ -109,6 +119,13 @@ public class UIController {
         stackValueColumn.setCellValueFactory(new PropertyValueFactory("valueProperty"));
         stackTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         stackTypeColumn.setCellValueFactory(new PropertyValueFactory("typeProperty"));
+
+        //local variable display
+        tableViewLocalVariables.setItems(stackEntries);
+        localVariableValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        localVariableValueColumn.setCellValueFactory(new PropertyValueFactory("valueProperty"));
+        localVariableTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        localVariableTypeColumn.setCellValueFactory(new PropertyValueFactory("typeProperty"));
 
         //Capture System.out to the mini-console
         SystemOutCapturePrintStream stream = new SystemOutCapturePrintStream(this.systemOutTextArea, System.out);
@@ -210,7 +227,7 @@ public class UIController {
             return;
         }
 
-        if (stepCount > 0) {
+            if (stepCount > 0) {
             //de-highlight previous row
             //this.methodRows.get(stepCount-1).setStyle("-fx-background-color:grey");
             this.methodRows.get(stepCount - 1).setStyle("");

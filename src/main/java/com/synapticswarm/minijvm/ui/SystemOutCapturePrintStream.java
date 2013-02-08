@@ -53,7 +53,13 @@ public class SystemOutCapturePrintStream extends PrintStream implements StackDis
 		super(out, autoFlush, encoding);
 	}
 
-	@Override
+    //grubby way of getting autoboxing working with the reflection in InvokeVirtual
+    public void println(Integer x) {
+        super.println(x);
+        this.textArea.appendText(x + "\n");
+    }
+
+    @Override
 	public void println(String str) {
 		super.println(str);
 		this.textArea.appendText(str + "\n");
