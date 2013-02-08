@@ -39,9 +39,9 @@ public class AdditionExample {
                 new MethodEntryDisplayModel(5, "iload_2", null, null),
                 new MethodEntryDisplayModel(6, "iadd", null, null),
                 new MethodEntryDisplayModel(7, "istore_3", null, null),
-                new MethodEntryDisplayModel(8, "getstatic", "#2", "// Field java/lang/System.out:Ljava/io/PrintStream;"),
+                new MethodEntryDisplayModel(8, "getstatic", "#1", "// Field java/lang/System.out:Ljava/io/PrintStream;"),
                 new MethodEntryDisplayModel(11, "iload_3", null, null),
-                new MethodEntryDisplayModel(12, "invokevirtual", "#3", "// Method java/io/PrintStream.println:(I)V"),
+                new MethodEntryDisplayModel(12, "invokevirtual", "#2", "// Method java/io/PrintStream.println:(I)V"),
                 new MethodEntryDisplayModel(15, "return", null, null));
 
     }

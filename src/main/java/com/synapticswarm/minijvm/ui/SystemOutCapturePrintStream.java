@@ -14,7 +14,7 @@ import javafx.scene.control.TextArea;
  * @author john
  *
  */
-public class SystemOutCapturePrintStream extends PrintStream {
+public class SystemOutCapturePrintStream extends PrintStream implements StackDisplayName {
 	private TextArea textArea;
 	
 	public SystemOutCapturePrintStream(javafx.scene.control.TextArea textArea, OutputStream out){
@@ -59,4 +59,8 @@ public class SystemOutCapturePrintStream extends PrintStream {
 		this.textArea.appendText(str + "\n");
 	}
 
+    @Override
+    public String getName() {
+        return "System.out";
+    }
 }

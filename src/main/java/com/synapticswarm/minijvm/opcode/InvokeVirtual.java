@@ -58,7 +58,13 @@ public class InvokeVirtual extends BaseOpCode {
 		
 		Method tgt = null;
 		try {
-			tgt = targetObject.getClass().getMethod(methodName, poppedParameter.getClass());
+
+            if (targetObject.getClass().equals(System.out.getClass())){
+                tgt = System.out.getClass().getMethod(methodName, poppedParameter.getClass());
+            }
+            else{
+                tgt = targetObject.getClass().getMethod(methodName, poppedParameter.getClass());
+            }
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
