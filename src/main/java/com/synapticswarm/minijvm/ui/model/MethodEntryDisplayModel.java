@@ -4,6 +4,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Maps a domain object (a line of opcode in a method) to an equivalent UI display object with displayable properties.
+ */
 public class MethodEntryDisplayModel {
 
 	private SimpleStringProperty offset = new SimpleStringProperty();

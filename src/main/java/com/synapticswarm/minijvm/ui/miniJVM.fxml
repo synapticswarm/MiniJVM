@@ -61,11 +61,9 @@
                 </SplitPane>
               </children>
             </AnchorPane>
-
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-
               <children>
-                <SplitPane dividerPositions="0.5" focusTraversable="true" orientation="VERTICAL" prefHeight="358.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <SplitPane dividerPositions="0.33210332103321033, 0.6678966789667896" focusTraversable="true" orientation="VERTICAL" prefHeight="358.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <items>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                       <children>
@@ -85,8 +83,6 @@
                         </TitledPane>
                       </children>
                     </AnchorPane>
-
-
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                       <children>
                         <TitledPane animated="false" prefHeight="75.0" prefWidth="234.0" text="Local Variables" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -95,6 +91,7 @@
                               <children>
                                 <TableView fx:id="tableViewLocalVariables" prefHeight="49.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                   <columns>
+                                    <TableColumn prefWidth="75.0" text="Index" fx:id="localVariableIndexColumn" />
                                     <TableColumn prefWidth="75.0" sortable="false" text="Value" fx:id="localVariableValueColumn" />
                                     <TableColumn prefWidth="75.0" sortable="false" text="Type" fx:id="localVariableTypeColumn" />
                                   </columns>
@@ -105,12 +102,6 @@
                         </TitledPane>
                       </children>
                     </AnchorPane>
-
-                 </items>
-                </SplitPane>
-                <SplitPane dividerPositions="0.5" focusTraversable="true" orientation="VERTICAL" prefHeight="358.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                       <children>
                         <TitledPane animated="false" prefHeight="175.0" prefWidth="234.0" text="System.out" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -124,7 +115,7 @@
                         </TitledPane>
                       </children>
                     </AnchorPane>
-                 </items>
+                  </items>
                 </SplitPane>
               </children>
             </AnchorPane>
@@ -140,9 +131,7 @@
         <Button mnemonicParsing="false" onAction="#resetFired" text="Reset" />
       </children>
     </HBox>
-    <ComboBox id="choiceBox" fx:id="choiceBox_examples" layoutY="14.0" prefHeight="21" prefWidth="170.0" AnchorPane.rightAnchor="32.0">
-
-    </ComboBox>
+    <ComboBox id="choiceBox" fx:id="choiceBox_examples" layoutY="14.0" prefHeight="21.0" prefWidth="170.0" AnchorPane.rightAnchor="32.0" />
     <Label layoutY="13.0" prefHeight="21.0" prefWidth="81.0" text="Load Example:" AnchorPane.rightAnchor="201.0" />
   </children>
 </AnchorPane>

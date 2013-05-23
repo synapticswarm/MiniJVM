@@ -6,6 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Maps a domain object (an entry in the Constant Pool) to an equivalent UI display object with displayable properties.
+ */
 public class ConstantPoolEntryDisplayModel {
 
 	private SimpleStringProperty indexProperty = new SimpleStringProperty();

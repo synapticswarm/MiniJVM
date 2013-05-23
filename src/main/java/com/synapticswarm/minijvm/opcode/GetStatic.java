@@ -1,6 +1,7 @@
 package com.synapticswarm.minijvm.opcode;
 
-import com.synapticswarm.minijvm.JVM.MethodContext;
+import com.synapticswarm.minijvm.JVM;
+import com.synapticswarm.minijvm.MethodContext;
 import com.synapticswarm.minijvm.MiniClassLoader;
 import com.synapticswarm.minijvm.MiniStack;
 import com.synapticswarm.minijvm.model.CPClass;
@@ -9,6 +10,7 @@ import com.synapticswarm.minijvm.model.CPNameAndType;
 import com.synapticswarm.minijvm.model.CPUtf8;
 import com.synapticswarm.minijvm.model.MiniConstantPool;
 
+//Locates a static object and pushes it onto the stack.
 public class GetStatic extends BaseOpCode {
 
     @Override

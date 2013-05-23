@@ -5,10 +5,7 @@ import com.synapticswarm.minijvm.ObservableStack;
 import com.synapticswarm.minijvm.examples.AdditionExample;
 import com.synapticswarm.minijvm.examples.HelloWorldExample;
 import com.synapticswarm.minijvm.model.MiniClassFile;
-import com.synapticswarm.minijvm.ui.model.ClassFileFactory;
-import com.synapticswarm.minijvm.ui.model.ConstantPoolEntryDisplayModel;
-import com.synapticswarm.minijvm.ui.model.MethodEntryDisplayModel;
-import com.synapticswarm.minijvm.ui.model.StackEntryDisplayModel;
+import com.synapticswarm.minijvm.ui.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,6 +41,8 @@ public class UIController {
     TableColumn localVariableValueColumn;
     @FXML
     TableColumn localVariableTypeColumn;
+    @FXML
+    TableColumn localVariableIndexColumn;
 
     @FXML
     TableView tableViewMethodDisplay;
@@ -79,7 +78,7 @@ public class UIController {
     private ObservableList<ConstantPoolEntryDisplayModel> constantPoolEntries;
     private ObservableList<MethodEntryDisplayModel> methodEntries;
     private ObservableList<StackEntryDisplayModel> stackEntries = FXCollections.observableArrayList();
-    private ObservableList<StackEntryDisplayModel> localVariableEntries = FXCollections.observableArrayList();
+    private ObservableList<LocalVariableEntryDisplayModel> localVariableEntries = FXCollections.observableArrayList();
 
     //TODO must be a better way of capturing rows
     private List<TableRow> methodRows = new ArrayList<TableRow>();
@@ -121,7 +120,9 @@ public class UIController {
         stackTypeColumn.setCellValueFactory(new PropertyValueFactory("typeProperty"));
 
         //local variable display
-        tableViewLocalVariables.setItems(stackEntries);
+        tableViewLocalVariables.setItems(localVariableEntries);
+        localVariableIndexColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        localVariableIndexColumn.setCellValueFactory(new PropertyValueFactory("indexProperty"));
         localVariableValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         localVariableValueColumn.setCellValueFactory(new PropertyValueFactory("valueProperty"));
         localVariableTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -139,28 +140,11 @@ public class UIController {
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        loadExample(choiceBox_examples.getSelectionModel().getSelectedItem());
+                        loadExampleFired(choiceBox_examples.getSelectionModel().getSelectedItem());
                     }
                 }
         );
         choiceBox_examples.getSelectionModel().select("Hello World");
-    }
-
-    private void loadExample(String example){
-        if("Hello World".equals(example)){
-            this.constantPoolEntries = HelloWorldExample.Data.constantPoolEntries;
-            this.methodEntries = HelloWorldExample.Data.methodEntries;
-        }else if("Addition".equals(example)){
-            this.constantPoolEntries = AdditionExample.Data.constantPoolEntries;
-            this.methodEntries = AdditionExample.Data.methodEntries;
-        }else if("None".equals(example)){
-            this.constantPoolEntries.clear();
-            this.methodEntries.clear();
-        }else{
-            this.systemOutTextArea.appendText("unrecognized example " + example);
-        }
-        tableViewConstantPool.setItems(constantPoolEntries);
-        tableViewMethodDisplay.setItems(methodEntries);
     }
 
     //I cannot believe I have to write this method. why do the properties not magically update?!
@@ -183,7 +167,6 @@ public class UIController {
                 new EventHandler<CellEditEvent<? extends Object, String>>() {
                     @Override
                     public void handle(CellEditEvent<? extends Object, String> t) {
-                        //ConstantPoolEntryDisplayModel cpedm = t.getRowValue();//getTableView().getItems().get(t.getTablePosition().getRow());
                         setPropertyValue(t.getRowValue(), propertyName, t.getNewValue());
                     }
                 }
@@ -200,7 +183,6 @@ public class UIController {
                     @Override
                     public void handle(Event t) {
                         CellEditEvent cee = (CellEditEvent) t;
-                        //ConstantPoolEntryDisplayModel cpedm = (ConstantPoolEntryDisplayModel) cee.getRowValue();
                         setPropertyValue(cee.getRowValue(), selectedValuePropertyName, (String) cee.getNewValue());
                     }
                 }
@@ -212,7 +194,7 @@ public class UIController {
 
         try{
             myClassFile = ClassFileFactory.parseClassFile(constantPoolEntries, methodEntries);
-            jvm = new JVM(new ObservableStack(this.stackEntries), myClassFile);
+            jvm = new JVM(new ObservableStack(this.stackEntries), this.localVariableEntries, myClassFile);
             this.maxStepCount = myClassFile.getMainMethod().getEntries().size();
         }
         catch (Exception ex){
@@ -221,23 +203,33 @@ public class UIController {
     }
 
     private JVM jvm = null;
+    private int stepCount = 0;
+    private int maxStepCount = -1;
 
     private void highlightRow() {
         if (stepCount == this.maxStepCount) {
             return;
         }
 
-            if (stepCount > 0) {
+        if (stepCount > 0) {
             //de-highlight previous row
-            //this.methodRows.get(stepCount-1).setStyle("-fx-background-color:grey");
-            this.methodRows.get(stepCount - 1).setStyle("");
+            deHighlightRow(methodRows.get(stepCount - 1));
         }
 
         this.methodRows.get(stepCount).setStyle("-fx-background-color:yellow");
     }
 
+    private void highlightFinalRow(){
+        this.methodRows.get(this.maxStepCount - 1).setStyle("-fx-background-color:yellow");
+    }
+
+    private void deHighlightRow(TableRow row){
+        row.setStyle("");
+    }
+
+    //pretty lame to have to do this... find all the rows and store them for highlighting/de-highlighting later.
     //TODO this doesnt work if done at end of init method.. where it would look neater.
-    private void captureRows() {
+    private void captureRowsForHighlighting() {
         //Find all the Row objects for manipulation later
         Set<Node> nodes = this.tableViewMethodDisplay.lookupAll("TableRow");
         Iterator<Node> nodesItr = nodes.iterator();
@@ -248,24 +240,43 @@ public class UIController {
         }
     }
 
-    public void resetFired(ActionEvent event) {
-        this.stepCount = 0;
-        this.stackEntries.clear();
-
-        //reset row styles
-        for (TableRow row : this.methodRows) {
-            row.setStyle("");//back to de-highlighted style
+    private void loadExampleFired(String example){
+        if("Hello World".equals(example)){
+            this.constantPoolEntries = HelloWorldExample.Data.constantPoolEntries;
+            this.methodEntries = HelloWorldExample.Data.methodEntries;
+        }
+        else if("Addition".equals(example)){
+            this.constantPoolEntries = AdditionExample.Data.constantPoolEntries;
+            this.methodEntries = AdditionExample.Data.methodEntries;
         }
 
-        this.systemOutTextArea.clear();
+        tableViewConstantPool.setItems(constantPoolEntries);
+        tableViewMethodDisplay.setItems(methodEntries);
+
+        resetAllViewItems();
     }
 
-    private int stepCount = 0;
-    private int maxStepCount = -1;
+    public void resetFired(ActionEvent event) {
+        resetAllViewItems();
+    }
+
+    private void resetAllViewItems(){
+        this.stepCount = 0;
+        this.maxStepCount = -1;
+        this.stackEntries.clear();
+        this.localVariableEntries.clear();
+        this.systemOutTextArea.clear();
+
+        //de-highlight rows
+        for (TableRow row : this.methodRows) {
+            deHighlightRow(row);
+        }
+        this.methodRows.clear();
+    }
 
     public void stepFired(ActionEvent event) {
         if (stepCount == 0) {
-            captureRows();
+            captureRowsForHighlighting();
             startJVM();
         }
 
@@ -279,11 +290,11 @@ public class UIController {
     }
 
     public void runFired(ActionEvent event) {
-        captureRows();
-        resetFired(event);
+        resetAllViewItems();
+        captureRowsForHighlighting();//needed as we will be highlighting the final row
         startJVM();
         jvm.executeAll();
-        this.methodRows.get(this.maxStepCount - 1).setStyle("-fx-background-color:yellow");
+        highlightFinalRow();
     }
 
 }

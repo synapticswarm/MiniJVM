@@ -2,7 +2,8 @@ package com.synapticswarm.minijvm.opcode;
 
 import java.lang.reflect.Method;
 
-import com.synapticswarm.minijvm.JVM.MethodContext;
+import com.synapticswarm.minijvm.JVM;
+import com.synapticswarm.minijvm.MethodContext;
 import com.synapticswarm.minijvm.MiniStack;
 import com.synapticswarm.minijvm.model.CPMethodref;
 import com.synapticswarm.minijvm.model.CPNameAndType;
