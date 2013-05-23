@@ -1,8 +1,8 @@
 ## What is miniJVM ? ##
 
-+miniJVM is a little gui app that lets you edit your Java bytecode in a more friendly and typesafe way than in Notepad.
-+It also lets you step through your bytecode, debugger style, and see what is being pushed/popped off the stack.
-+Great for learning bytecode!
++ miniJVM is a little gui app that lets you edit your Java bytecode in a more friendly and typesafe way than in Notepad.
++ It also lets you step through your bytecode, debugger style, and see what is being pushed/popped off the stack.
++ Great for learning bytecode!
 
 ## To build and run miniJVM do this: ##
 
