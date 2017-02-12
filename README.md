@@ -5,7 +5,7 @@ MiniJMV [![Follow](https://img.shields.io/twitter/follow/MyClaraOswin.svg)](http
 + It also lets you step through your bytecode, debugger style, and see what is being pushed/popped off the stack.
 + Great for learning bytecode!
 
-## To build and run miniJVM do this:
+## Build Instructions
 
  - Clone the repository
  - Run 'mvn clean build'
