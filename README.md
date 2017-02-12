@@ -12,7 +12,7 @@ MiniJMV [![Follow](https://img.shields.io/twitter/follow/MyClaraOswin.svg)](http
 
 ###### Maintained by FFY00 (Anubis)
 
-- Maven now can properly build this project
+- Build is now properly working for maven
 
 
 ## Some screenshots:
