@@ -1,4 +1,4 @@
-MiniJMV [![Follow](https://img.shields.io/twitter/follow/MyClaraOswin.svg)](http://twitter.com/intent/user?screen_name=MyClaraOswin)
+MiniJMV [![Follow](https://img.shields.io/twitter/follow/MissingClara.svg)](http://twitter.com/intent/user?screen_name=MissingClara)
 ==
 
 + miniJVM is a little gui app that lets you edit your Java bytecode in a more friendly and typesafe way than in Notepad.
